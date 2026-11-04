@@ -1,0 +1,47 @@
+/**
+ * Design Tokens — the source of truth for shared visual decisions.
+ * LAB EXERCISE: change --radius-card below, then observe both pages.
+ */
+:root {
+  color-scheme: dark;
+  --color-bg: #0b1020;
+  --color-sidebar: #0b1020;
+  --color-surface: #12192a;
+  --color-surface-raised: #171f33;
+  --color-surface-hover: #1e2840;
+  --color-surface-selected: #1b2540;
+  --color-border: #293149;
+  --color-border-soft: #202940;
+  --color-text: #f2f4fa;
+  --color-text-muted: #9faac1;
+  --color-text-faint: #77849e;
+  --color-accent: #978eff;
+  --color-accent-strong: #7a70ed;
+  --color-accent-soft: #262147;
+  --color-success: #4bdfb2;
+  --color-warning: #ffbf68;
+  --color-danger: #ff7f9c;
+  --color-chart-agent: #5ba8ff;
+  --color-chart-llm: #988aff;
+  --color-chart-tool: #40c9a5;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-card: 14px;
+  --radius-pill: 999px;
+  --sidebar-width: 244px;
+  --page-max-width: 1580px;
+  --font-ui: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --shadow-card: 0 10px 32px rgba(0, 0, 0, 0.08);
+  --focus-ring: 0 0 0 3px rgba(151, 142, 255, 0.38);
+}
