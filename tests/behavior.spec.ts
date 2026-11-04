@@ -43,3 +43,24 @@ test('mobile: navigation and primary content do not overflow viewport', async ({
   const widths = await page.evaluate(() => ({ content: document.documentElement.scrollWidth, viewport: window.innerWidth }));
   expect(widths.content).toBeLessThanOrEqual(widths.viewport + 1);
 });
+
+test('LLM Metrics: sorts cost descending and preserves sorting across model filters', async ({ page }) => {
+  await page.goto('/metrics');
+  const costHeader = page.getByRole('columnheader', { name: 'Sort by cost descending' });
+  const costs = page.locator('.model-table tbody tr td:last-child');
+  const summary = page.locator('.metrics-grid');
+  const originalSummary = await summary.innerText();
+
+  await expect(costHeader).toHaveAttribute('aria-sort', 'none');
+  await page.getByRole('button', { name: 'Sort by cost descending' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(costHeader).toHaveAttribute('aria-sort', 'descending');
+  await expect(costs).toHaveText(['$842.10', '$610.45', '$318.20']);
+  await expect(summary).toHaveText(originalSummary, { useInnerText: true });
+
+  await page.getByRole('combobox', { name: 'Filter by model' }).selectOption('Gemini');
+  await expect(costs).toHaveText(['$318.20']);
+  await page.getByRole('combobox', { name: 'Filter by model' }).selectOption('all');
+  await expect(costs).toHaveText(['$842.10', '$610.45', '$318.20']);
+  await expect(costHeader).toHaveAttribute('aria-sort', 'descending');
+});
