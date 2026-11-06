@@ -10,6 +10,7 @@ React + TypeScript + Vite + Playwright 示例工程
 | ---------- | -------------- | ----------------------------------------------------------- |
 | `/`        | Trace Explorer | 搜索、状态筛选、每页 5 条分页、Trace 选择、Waterfall 与详情 |
 | `/metrics` | LLM Metrics    | 模型过滤、成本排序、延迟与 Token 指标、图表和明细           |
+| `/compare` | Trace Compare | 同操作执行选择、指标差异、步骤对齐及关联 Trace 定位 |
 | `/errors`  | Error Analysis | 异常聚合、搜索与筛选、排序、分组及关联 Trace 定位           |
 
 数据来自 `src/data/` 中的固定样本。统计与成本不是生产测量，项目尚未连接真实 OpenTelemetry、Sentry、后端、登录或流式数据，也未提供大数据虚拟化、性能基准和 CI 流水线。
@@ -41,7 +42,7 @@ npm run test:visual
 
 当前 Playwright 配置使用 `channel: 'chrome'`，需要本机 Google Chrome；安装命令用于尚未安装 Chrome 的环境。
 
-行为测试覆盖页面交互和路由，视觉测试覆盖三个桌面页面，以及 Metrics、Error Analysis 的移动端截图。具体用例以 `tests/` 为准；单次检查是否通过，以实际运行结果为准。
+行为测试覆盖页面交互和路由，视觉测试将共享导航、顶栏与页面内容分别对比：共享区域覆盖桌面、紧凑和移动布局，内容区域覆盖四个桌面页面及 Metrics、Error Analysis、Trace Compare 的移动端，并单独检查 Trace Compare 弹层。具体用例以 `tests/` 为准；单次检查是否通过，以实际运行结果为准。
 
 视觉测试对比当前页面与参考截图，不能自动判断页面是否美观或符合需求。仓库已有截图文件，但它们是否适合当前改动与运行环境，仍需审阅。操作系统、字体和浏览器版本都可能影响结果。
 
@@ -58,6 +59,8 @@ npm run test:visual:update
 Trace Explorer 展示了 AppShell、Card、Button、MetricCard 等基础组件与 TraceTable、TraceWaterfall 等领域视图的组合。LLM Metrics 复用布局、指标卡和视觉规则，同时保留独立的延迟图表与请求量展示；Error Analysis 继续复用这些基础能力，加入异常聚合与关联 Trace。
 
 可以按“实现一个页面 → 提炼已验证的共性 → 新页面复用 → 跨页回归”理解这个教学示例。这是演进思路的说明，不代表仓库保留了对应的真实开发日志。具体 UI 规则由 UI Guidelines 维护。
+
+执行对比页的规则与边界见 [Trace Compare 需求](docs/features/done/trace-compare.md)。新增固定对比样例接入共享 Trace 集合，Trace Explorer 的记录总数与分页随之增加；既有样例保持不变。
 
 ## 组件契约与示例
 

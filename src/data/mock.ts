@@ -1,4 +1,5 @@
 import { errorTraces } from './errors';
+import { comparisonTraces } from './comparisons';
 import type { ModelStats, Trace } from '../types/observability';
 
 // Fixed mock data = deterministic visual screenshots and repeatable experiments.
@@ -50,6 +51,7 @@ export const traces: Trace[] = [
     ],
   },
   ...errorTraces,
+  ...comparisonTraces,
 ];
 
 export const modelStats: ModelStats[] = [

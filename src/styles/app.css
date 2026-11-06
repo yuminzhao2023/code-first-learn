@@ -192,6 +192,11 @@ button:disabled { cursor: not-allowed; opacity: .55; }
   .waterfall-head, .waterfall-row { min-width: 590px; }
   .metric-value { font-size: 25px; }
 }
+/* Four navigation labels need a separate, wrapping row between phone and desktop layouts. */
+@media (min-width: 426px) and (max-width: 750px) {
+  .sidebar { flex-direction: column; align-items: stretch; gap: var(--space-3); }
+  .sidebar > nav.nav-links { flex-wrap: wrap; }
+}
 @media (max-width: 425px) {
   .sidebar { gap: 12px; }
   .brand { font-size: 14px; gap: 5px; }
