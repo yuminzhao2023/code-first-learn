@@ -1,3 +1,4 @@
+import { errorTraces } from './errors';
 import type { ModelStats, Trace } from '../types/observability';
 
 // Fixed mock data = deterministic visual screenshots and repeatable experiments.
@@ -48,6 +49,7 @@ export const traces: Trace[] = [
       { id: 'e3', label: 'llm.verify', kind: 'llm', offsetMs: 644, durationMs: 690, status: 'ok', depth: 1 },
     ],
   },
+  ...errorTraces,
 ];
 
 export const modelStats: ModelStats[] = [

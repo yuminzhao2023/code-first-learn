@@ -1,79 +1,86 @@
 # UI Guidelines — PulseTrace Lab
 
-Version: **V2 example**, evolved from the Trace Explorer screen (V1) to LLM Metrics (V2).
+本文维护跨页面适用的视觉、交互与 UI 复用规则，供 AI Agent 和贡献者使用。具体功能行为见对应页面、测试及 `docs/features/`。
 
-## 1. Design goals
+## 1. 适用范围与设计目标
 
-- **Audience**: developers debugging LLM/agent execution.
-- **Density**: information-dense, but rows and labels must remain readable.
-- **Appearance**: dark developer-tool UI; one accent family; status colors retain semantic meaning.
-- **No design handoff required**: approved code and tokens are the implementation reference. Figma can be added for team review later.
+- **用户**：调试 LLM 与 Agent 执行过程的开发者。
+- **信息密度**：支持密集的数据浏览，同时保持行内容、标签和操作可读。
+- **视觉方向**：暗色开发者工具界面，使用统一的强调色体系，状态颜色保持语义一致。
+- **实现依据**：共享视觉值以 [tokens.css](../src/styles/tokens.css) 为准；组件用法以现有 UI 组件和已验收页面为参考。Figma 不是必要依赖。
+- **规范边界**：本文描述应遵循的规则，不代表现有实现已全部满足；已知例外在对应章节说明，不据此自动扩大重构范围。
 
-## 2. Design Tokens
+## 2. 视觉基础
 
-Source of truth: [`src/styles/tokens.css`](../src/styles/tokens.css).
+### Token 与颜色
 
-| Token | Intent | Avoid |
-|---|---|---|
-| `--color-bg` | app canvas | hardcoding background in pages |
-| `--color-surface` | cards/panels | second arbitrary panel theme |
-| `--color-text` / `--color-text-muted` | typography hierarchy | faint text for critical information |
-| `--color-accent` | active navigation, visual highlights | using accent as error color |
-| `--color-success/warning/danger` | state semantics | using color as the only status cue |
-| `--radius-card` | shared panel curvature | per-page card radius overrides |
-| `--space-*` | repeatable spacing scale | random spacing for every new feature |
+| Token                                                              | 用途                         | 避免                                 |
+| ------------------------------------------------------------------ | ---------------------------- | ------------------------------------ |
+| `--color-bg` / `--color-sidebar`                                   | 页面画布与导航背景           | 页面自行建立另一套背景主题           |
+| `--color-surface` / `--color-surface-raised`                       | 面板与层级表面               | 为相同层级新增任意面板颜色           |
+| `--color-surface-hover` / `--color-surface-selected`               | 悬停与选中状态               | 将悬停当作持久选中状态               |
+| `--color-text` / `--color-text-muted` / `--color-text-faint`       | 主要内容、次要信息和辅助说明 | 关键内容使用过弱的文字颜色           |
+| `--color-accent` 及其变体                                          | 当前导航、重点操作和视觉强调 | 用强调色表达错误                     |
+| `--color-success` / `--color-warning` / `--color-danger`           | 成功、警告和错误             | 仅通过颜色传达状态                   |
+| `--color-chart-agent` / `--color-chart-llm` / `--color-chart-tool` | Span 类型区分                | 在不同视图中随意改变类型配色         |
+| `--color-border` / `--color-border-soft`                           | 边界与内容分隔               | 为相同边界增加不同颜色               |
+| `--radius-card` / `--shadow-card`                                  | 共享面板外观                 | 在单个页面覆盖所有 Card 的圆角或阴影 |
+| `--space-*`                                                        | 可重复的间距尺度             | 为相同用途随意选择不同间距           |
+| `--focus-ring`                                                     | 键盘焦点提示                 | 移除焦点提示而不提供替代             |
 
-**Known learning debt:** `src/styles/app.css` still contains local literal colors/spacing for some one-off details. In Lab 3, audit which should become semantic tokens. Don't indiscriminately move all values to the token layer.
+新增样式优先使用现有 token。`app.css` 中仍有字面颜色和间距；这是已有实现差异，不要求每次任务批量迁移，也不应把所有一次性数值都新增为 token。
 
-## 3. Component ownership
+### 排版与数据展示
 
-- `components/ui/` — pure general-purpose UI; zero domain models. Examples: `Card`, `Button`, `MetricCard`, `StatusBadge` (status enum is domain-coupled in this training repo; would move into domain package in a larger app).
-- `components/layout/` — shared workspace/navigation shell.
-- `components/observability/` — domain-specific visualizations (e.g. `TraceWaterfall`, `TraceTable`, `LatencyChart`).
-- `pages/` — composition, data selection, state and route content.
+- 正文与控件使用 `--font-ui`；ID、Span 标签等技术标识需要等宽展示时使用 `--font-mono` 或现有 `.mono` 样式。
+- 延续页面标题、分区标题、Card 标题、正文和辅助说明的层级，优先复用现有样式；不在本文件复制字号数值。
+- 表格的名称与描述左对齐，数值列沿用现有右对齐方式；可比较的数字使用等宽数字，明确单位和精度。
+- 图标复用现有 `Icon`；装饰图标不替代文字标签，只有图标的操作仍需提供可访问名称。
 
-## 4. Extraction decision
+## 3. 布局与响应式
 
-Ask these three questions:
+- 桌面 1440×900、移动端 390×844 是参考检查尺寸，不是固定画布；中间宽度也应随容器调整。
+- 复用 AppShell、页面标题区、指标网格与 Card 的现有布局。视口变窄时，操作区允许换行，多列内容按现有断点收为较少列。
+- 宽表格与 Waterfall 可在各自容器内横向滚动，不能撑宽整个页面；移动端保留导航和主要操作。
+- 长文本按所在区域选择换行或局部滚动；使用截断时，应保留查看完整内容的途径，不能只隐藏关键标识或错误信息。
 
-1. Is it needed by two places **with the same behavior/visual contract**?
-2. Can it have a small, stable API without dozens of booleans?
-3. Will extracting it reduce maintenance, not create a generic abstraction for one case?
+## 4. 通用交互与状态
 
-If not, leave it feature-local and revisit later.
+### 操作与输入
 
-## 5. Layout and interaction
+- 导航与跨页面跳转使用真实链接；选择或执行操作使用按钮，不能仅依赖可点击的 `tr`。
+- 重点操作使用主按钮，次要操作保持较低视觉权重；操作文案说明具体动作。
+- 状态通过文字与颜色共同表达，保持语义映射一致。
+- 搜索与筛选保留明确标签，现有 React 表单使用受控输入；占位文字不能作为唯一标签。
 
-- Desktop reference: 1440×900; mobile reference: 390×844.
-- Panels adapt to viewport; wide data tables can horizontally scroll within their container.
-- Navigation is real links (`/`, `/metrics`). Search/filter use controlled inputs. Operations in a table are buttons, not clickable `tr` elements.
-- Every form control must have a discoverable accessible name; preserve `:focus-visible` styles.
-- Empty filtered results must have an informative message; selected trace details reflect visible results.
-- Real data/telemetry is **not connected**. UI values are deterministic test fixtures.
+组件特有的用途、示例与限制集中在 `docs/components/` 维护，按任务需要查阅，修改组件契约时同步更新。API 类型以组件源码为准，不在总规范重复维护 Props 表。
 
-## 6. Versioned evolution
+### 状态与反馈
 
-### V1 — Trace Explorer
+- 悬停、键盘焦点、选中和禁用是不同状态。复用现有样式并保留状态语义，例如选择按钮的 `aria-pressed`、导航的 `aria-current` 和排序表头的 `aria-sort`。
+- 所有操作可通过键盘访问，保留可见焦点；禁用操作使用实际禁用属性，不能只改变外观。
+- 空结果提供有意义的说明；详情与当前可见结果保持一致，没有可选记录时显示空详情提示。
+- 分页、筛选、排序与选择的具体联动属于页面行为契约，不把某一页的条数限制推广到所有表格。
+- 实际引入异步数据时，再定义加载、请求失败和重试行为；不为尚未接入的能力添加假交互。
 
-- AppShell, `Card`, `Button`, `MetricCard`, `StatusBadge`, `TraceTable`, `TraceWaterfall`.
-- Global dark theme; page header and metrics pattern established.
-- Behaviors: search, filter, select trace, reset.
+## 5. 组件归属与扩展边界
 
-### V2 — LLM Metrics
+| 位置                            | 职责                                                |
+| ------------------------------- | --------------------------------------------------- |
+| `src/components/ui/`            | 通用 UI 基础组件，新增组件不依赖领域模型            |
+| `src/components/layout/`        | 共享工作区与导航布局                                |
+| `src/components/observability/` | TraceTable、TraceWaterfall、LatencyChart 等领域视图 |
+| `src/pages/`                    | 页面组合、数据选择、业务状态与页面私有资源          |
+| `src/styles/`                   | 共享 token 与全局／基础样式                         |
 
-- **Reuse**: AppShell, Card, shared colors, typography, spacing, data table pattern.
-- **Reuse**: existing `MetricCard`; **add** domain `LatencyChart` and fixed 14-day request bars.
-- **Do not generalize** `TraceWaterfall` into a generic chart component; semantics differ.
+**已有例外**：`StatusBadge` 位于 `ui/`，但依赖 `TraceStatus` 领域枚举。保留现状不代表允许新增类似依赖；迁移应在有明确范围的重构任务中处理。
 
-## 7. Change control
+只有同时满足以下条件，才提取共享 UI 组件：
 
-When a new page needs a style not in the tokens:
+1. 至少两个使用场景具有相同的行为与视觉契约。
+2. 接口能够保持简洁、稳定，不需要大量开关适配不同业务。
+3. 提取能减少维护成本，而不是为单个案例创建通用抽象。
 
-1. Try existing token/primitive.
-2. Make a local implementation if truly specific.
-3. Propose a token or shared primitive when at least two consumers need it.
-4. Review impact across both `/` and `/metrics`.
-5. Run typecheck, behavior tests, visual comparison; inspect diffs.
-6. Update guidelines when introducing a reusable rule, not for cosmetic one-off tweaks.
+未满足时保持局部实现。例如，TraceWaterfall 与 LatencyChart 的数据语义不同，不应仅因都绘制图形而合并为通用图表组件。
 
-Never blindly accept `--update-snapshots`. A failing screenshot test is a review request, not an instruction to rewrite the baseline.
+新增 token 必须表达有复用价值的视觉语义，并有多个实际使用场景；单处需求优先保持局部样式。共享规则改变时，明确原因与所有受影响页面，不能只检查最初的两个页面。仅在形成稳定、可复用规则时更新本规范。

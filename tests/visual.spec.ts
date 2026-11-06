@@ -25,3 +25,16 @@ test('approved mobile Metrics', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'LLM Metrics' })).toBeVisible();
   await expect(page).toHaveScreenshot('llm-metrics-mobile.png', { fullPage: true });
 });
+
+test('Error Analysis desktop', async ({ page }) => {
+  await page.goto('/errors');
+  await expect(page.getByRole('heading', { name: 'Error Analysis' })).toBeVisible();
+  await expect(page).toHaveScreenshot('error-analysis-desktop.png', { fullPage: true });
+});
+
+test('Error Analysis mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/errors');
+  await expect(page.getByRole('heading', { name: 'Error Analysis' })).toBeVisible();
+  await expect(page).toHaveScreenshot('error-analysis-mobile.png', { fullPage: true });
+});

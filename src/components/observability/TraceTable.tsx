@@ -2,6 +2,11 @@ import type { Trace } from '../../types/observability';
 import { milliseconds } from '../../lib/format';
 import { StatusBadge } from '../ui/StatusBadge';
 
+/**
+ * 按输入顺序展示 rows；调用方负责筛选、分页及唯一的 trace.id。
+ * 选择受 selectedId 控制，onSelect 只通知 ID，不在组件内更新选择或详情。
+ * selectedId 不在 rows 中时不选中任何行；详情回退由页面负责。
+ */
 export function TraceTable({ rows, selectedId, onSelect }: { rows: Trace[]; selectedId: string; onSelect: (id: string) => void }) {
   return (
     <div className="table-scroll">

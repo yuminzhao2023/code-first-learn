@@ -1,111 +1,90 @@
 # PulseTrace · Code-first Frontend Engineering Lab
 
-**中文版 · React + TypeScript + Vite + Playwright · 示例工程 / 教学最终态**
+React + TypeScript + Vite + Playwright 示例工程
 
-这是一个用于验证以下工作流的最小工程：
+项目演示的循环是：明确需求 → 修改页面 → 检查交互与视觉 → 人工验收 → 提炼可复用的 token、组件与规范 → 新页面复用 → 回归验证。
 
-`Product Spec → AI Agent → React 页面 → 人工验收 → 提炼 Design Tokens/Component Library/UI Guidelines/Visual Tests → 第二页复用 → 增量演进 → 回归验证`
+## 已有功能与边界
 
-本仓库提供两个**已经实现**的页面：
+| 路径       | 页面           | 功能                                                        |
+| ---------- | -------------- | ----------------------------------------------------------- |
+| `/`        | Trace Explorer | 搜索、状态筛选、每页 5 条分页、Trace 选择、Waterfall 与详情 |
+| `/metrics` | LLM Metrics    | 模型过滤、成本排序、延迟与 Token 指标、图表和明细           |
+| `/errors`  | Error Analysis | 异常聚合、搜索与筛选、排序、分组及关联 Trace 定位           |
 
-- `http://localhost:5173/` — Trace Explorer：搜索、状态筛选、点击操作、查看 Trace Waterfall 和详情。
-- `http://localhost:5173/metrics` — LLM Metrics：模型过滤、成本/延迟/Token 指标、图表、明细表。
+数据来自 `src/data/` 中的固定样本。统计与成本不是生产测量，项目尚未连接真实 OpenTelemetry、Sentry、后端、登录或流式数据，也未提供大数据虚拟化、性能基准和 CI 流水线。
 
-**注意：** 页面数据全部来自 `src/data/mock.ts`，不是生产级 OpenTelemetry/Sentry 数据。没有后端、登录或真实流式处理。代码是一个教学示例，不应被误认为完整的生产项目。此仓库未包含实际 AI 对话历史，因此“V1 → V2”是演进思路的可学习示例，而非可证实的真实开发日志。
+## 本地启动
 
-## 运行要求
-
-- Node.js **22.12+**（Vite 8 兼容要求）。
-- npm 和能够访问 npm registry 的网络。
-- Playwright 首次测试需要安装 Chromium 浏览器。
+- Node.js 22.12+（项目 `package.json` 的要求）。
+- npm，以及安装依赖时可访问 npm registry 的网络。
 
 ```bash
 npm install
 npm run dev
 ```
 
-打开 `http://localhost:5173` 或 `http://localhost:5173/metrics`。
+打开终端输出的地址，默认是 `http://127.0.0.1:5173`，通过侧栏切换页面。
 
-> **交付验证说明**：本次生成环境无法访问 npm Registry，不能在此安装依赖或运行浏览器测试。已完成 TS/TSX 语法检查；构建与测试仍需你本机执行。见 `docs/VALIDATION.md`。
-
-## 构建与行为测试
+## 运行检查
 
 ```bash
+npm run docs:check
 npm run typecheck
 npm run build
-npx playwright install chromium
+npx playwright install chrome
 npm run test:e2e
+npm run test:visual
 ```
 
-## 视觉回归测试：先审核、再建立基线
+`npm run docs:check` 检查实际 Markdown 链接与规范链接依赖；修改检查器时运行 `npm run test:docs` 验证解析边界。检查器不判断自然语言阅读要求或引用是否必要。
 
-仓库故意**不附带批准截图**，因为 Windows/macOS/Linux 的字体和浏览器渲染可能不同。
+当前 Playwright 配置使用 `channel: 'chrome'`，需要本机 Google Chrome；安装命令用于尚未安装 Chrome 的环境。
+
+行为测试覆盖页面交互和路由，视觉测试覆盖三个桌面页面，以及 Metrics、Error Analysis 的移动端截图。具体用例以 `tests/` 为准；单次检查是否通过，以实际运行结果为准。
+
+视觉测试对比当前页面与参考截图，不能自动判断页面是否美观或符合需求。仓库已有截图文件，但它们是否适合当前改动与运行环境，仍需审阅。操作系统、字体和浏览器版本都可能影响结果。
+
+首次建立或有意更新基线时，先查看页面与差异，再生成候选截图：
 
 ```bash
-npm run test:visual:update    # 初次人工核验通过后，创建参考截图
-npm run test:visual           # 后续与批准过的截图对比
+npm run test:visual:update
 ```
 
-运行 update 后请查看 `tests/visual.spec.ts-snapshots/`，截图没有错误才提交到版本控制。修改全局 Tokens 后，即便差异是预期的，也先人工审阅再更新快照。**不要为了让测试变绿就更新所有截图。**
+该命令会更新所有视觉用例。检查 `tests/visual.spec.ts-snapshots/` 中的 PNG 和无关改动，人工批准后才能提交基线，再运行 `npm run test:visual`。失败截图和 diff 通常位于 `test-results/`。完整要求见目录入口中的验证规范。
 
-## 目录导读
+## 页面复用示例
 
-```text
-AGENTS.md                          # Agent 开发规则（必须先读）
-docs/
-  UI_GUIDELINES.md                 # UI Guidelines 与设计系统演进
-  WORKFLOW.md                      # 中文详细工作流、PR 拆分及设计决策
-  LABS.md                          # 4 个实操实验及验收标准
-  VALIDATION.md                    # 当前环境实际检查结果与本机验证清单
-prompts/
-  01-first-page.md                 # 第 1 页生成指令（复刻练习）
-  02-second-page.md                # 第 2 页复用与扩展
-  03-global-token-change.md        # 共享 token 的变更控制
-  04-visual-bugfix.md               # 浏览器截图 + 自然语言反馈
-src/
-  styles/tokens.css                # Design Tokens（共享语义变量）
-  styles/app.css                   # 页面与组件样式（包含可审查的技术债）
-  components/ui/                   # 通用组件（Card、Button、MetricCard 等）
-  components/layout/               # AppShell 导航布局
-  components/observability/        # TraceWaterfall、TraceTable、LatencyChart
-  data/mock.ts                     # 固定样本数据，保障可复现
-  pages/TraceExplorer.tsx          # 页面 1
-  pages/LlmMetrics.tsx             # 页面 2
-tests/
-  behavior.spec.ts                 # Playwright 功能验收
-  visual.spec.ts                   # Playwright 截图回归
-```
+Trace Explorer 展示了 AppShell、Card、Button、MetricCard 等基础组件与 TraceTable、TraceWaterfall 等领域视图的组合。LLM Metrics 复用布局、指标卡和视觉规则，同时保留独立的延迟图表与请求量展示；Error Analysis 继续复用这些基础能力，加入异常聚合与关联 Trace。
 
-## 推荐阅读顺序
+可以按“实现一个页面 → 提炼已验证的共性 → 新页面复用 → 跨页回归”理解这个教学示例。这是演进思路的说明，不代表仓库保留了对应的真实开发日志。具体 UI 规则由 UI Guidelines 维护。
 
-1. `docs/WORKFLOW.md` — 先理解两层循环。
-2. `AGENTS.md` — Agent 怎样不破坏公共体系。
-3. `src/styles/tokens.css` 和 `docs/UI_GUIDELINES.md`。
-4. `src/pages/TraceExplorer.tsx` → `src/pages/LlmMetrics.tsx`。
-5. `docs/LABS.md` — 做 Lab 1～4，并使用 `prompts/` 进行 Agent 实验。
+## 组件契约与示例
 
-## 测试与工程边界
+代表性组件的使用文档集中维护在 `docs/components/`：[Button](docs/components/ui/Button.md)、[MetricCard](docs/components/ui/MetricCard.md)、[TraceTable](docs/components/observability/TraceTable.md)。文档解释适用场景、示例、状态和限制；TypeScript 是 API 的权威来源，JSDoc 记录非直观契约，测试提供对应验证证据。组件契约变化时同步更新对应文档。
 
-- 行为测试覆盖：Trace 搜索、筛选、行选择、重置，模型过滤，以及移动端页面整体不溢出。
-- 视觉测试覆盖：两个桌面页面和一个移动页面的固定截图。
-- 截图对比是**回归测试**，不能自动判定设计是否足够美观。
-- 统计/图表为示意数据；尚未接入真实 OTel，也未加入性能基准、大数据虚拟化或 CI 流水线。
-- 本示例使用 React 19、Vite 8、Playwright 1.64，依赖版本应结合实际项目兼容性管理。
+目前使用 Markdown 与页面测试维护这些示例；需要集中预览多个组件状态时再考虑 Storybook。日常改动按验证规范选择检查范围，“运行检查”中的完整检查适合整体回归。
 
-## 常见问题
+## 目录与规范入口
 
-**Q：为什么不是一开始就把所有 UI 组件造完？** 先验证真实业务需求，再按需抽象。新页面优先复用既有能力。
-
-**Q：新页面有新元素，四类文件都要更新吗？** 不一定。只有共享契约改变时才更新对应 token、组件或规范；新增行为/视觉状态时补测试。
-
-**Q：在哪里让 Codex 自动读这些规则？** 把仓库作为工作目录运行 Codex / Claude Code，显式要求先读 `AGENTS.md`。对工具是否自动发现此文件不要做未经验证的假设。
-
-**Q：为何没有 Figma？** 这是专门验证 Code-first 的实验。设计规范作为代码仓库内的 tokens、components、guidelines 和 tests 管理；需要设计师协同时可再引入 Figma MCP。
+| 位置                                   | 内容与读者                                       |
+| -------------------------------------- | ------------------------------------------------ |
+| [AGENTS.md](AGENTS.md)                 | AI Agent 必读入口、优先级与约束                  |
+| [开发工作流](docs/WORKFLOW.md)         | Agent 与贡献者执行任务的步骤、影响范围和交付要求 |
+| [验证规范](docs/VALIDATION.md)         | 检查命令、证据要求与视觉基线批准流程             |
+| [UI Guidelines](docs/UI_GUIDELINES.md) | 设计语言、组件归属与 token 变更规则              |
+| [代码规范](docs/CODE_GUIDELINES.md)    | 模块、状态、命名与注释规范                       |
+| `docs/features/`                       | 具体功能的需求与设计说明                         |
+| `src/styles/`                          | 共享语义 token 与全局样式                        |
+| `src/components/`                      | UI 基础组件、布局与领域组件                      |
+| `src/pages/`                           | 页面组合、局部状态与页面资源                     |
+| `src/data/`                            | 固定样本数据                                     |
+| `tests/`                               | Playwright 行为与截图测试                        |
 
 ## 参考资料
 
-- Vite Getting Started: https://vite.dev/guide/
-- React Learn: https://react.dev/learn
-- Playwright visual comparisons: https://playwright.dev/docs/test-snapshots
+- [Vite Getting Started](https://vite.dev/guide/)
+- [React Learn](https://react.dev/learn)
+- [Playwright visual comparisons](https://playwright.dev/docs/test-snapshots)
 
 **授权**：此示例工程代码可自由用于个人学习及修改；不包含第三方图片、品牌素材或专有 SDK。

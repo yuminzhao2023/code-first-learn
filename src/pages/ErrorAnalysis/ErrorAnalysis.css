@@ -1,0 +1,191 @@
+/* ErrorAnalysis 页面私有样式；共享外观使用 tokens.css 与现有 UI 类。 */
+.error-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.error-summary p, .error-detail p, .error-note, .error-bars p {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.error-common {
+  font-size: 22px;
+  margin-top: var(--space-3);
+  overflow-wrap: anywhere;
+}
+
+.error-filters {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-6);
+}
+
+.error-filters .search-field {
+  flex: 1 1 260px;
+}
+
+.error-filters input {
+  min-width: 0;
+}
+
+.error-dimensions {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.error-dimensions [aria-pressed="true"] {
+  color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.error-bars {
+  padding: 0 var(--space-6) var(--space-6);
+  display: grid;
+  gap: var(--space-3);
+}
+
+.error-bar {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 12px;
+}
+
+.error-bar > span {
+  overflow-wrap: anywhere;
+}
+
+.error-bar strong {
+  text-align: right;
+}
+
+.error-track {
+  background: var(--color-surface-raised);
+  height: 8px;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.error-track > div {
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: inherit;
+}
+
+.error-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+  margin-top: var(--space-6);
+}
+
+.error-workspace > *, .error-summary > * {
+  min-width: 0;
+}
+
+.error-table {
+  min-width: 620px;
+}
+
+.error-table .selected {
+  background: var(--color-surface-selected);
+}
+
+.error-table [aria-pressed="true"] {
+  color: var(--color-accent);
+}
+
+.error-table time {
+  font-size: 12px;
+}
+
+.error-detail {
+  padding: 0 var(--space-6) var(--space-6);
+  overflow-wrap: anywhere;
+}
+
+.error-detail h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.error-detail h4 {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+}
+
+.error-detail pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: var(--color-bg);
+  border-left: 2px solid var(--color-danger);
+  color: var(--color-danger);
+  padding: var(--space-3);
+  font: 12px/1.7 var(--font-mono);
+}
+
+.error-executions {
+  padding: 0;
+  list-style: none;
+}
+
+.error-executions li {
+  border-top: 1px solid var(--color-border-soft);
+  padding: var(--space-3) 0;
+  display: grid;
+  gap: var(--space-1);
+}
+
+.error-executions time, .error-executions code {
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+.error-executions a {
+  color: var(--color-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  justify-self: start;
+}
+
+/* 空间不足时详情移到表格下方；宽表格仍在自身容器中横向滚动。 */
+@media (max-width: 1100px) {
+  .error-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .error-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .error-bar {
+    grid-template-columns: 110px minmax(0, 1fr) 24px;
+  }
+  .error-filters .filter-select {
+    flex: 1 1 140px;
+    min-width: 0;
+  }
+  .error-filters select {
+    width: 100%;
+  }
+  .error-analysis .period-control {
+    white-space: normal;
+  }
+}
+
+.error-table th, .error-table td {
+  padding-inline: var(--space-3);
+}
+
+.error-table td:last-child {
+  white-space: normal;
+}
