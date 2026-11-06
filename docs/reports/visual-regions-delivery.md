@@ -1,6 +1,6 @@
 # 视觉截图分区交付记录
 
-状态：测试改造完成，分区候选基线待人工审核；未提交代码或截图。
+状态：测试改造完成，15 张分区基线已获用户人工审核批准；批准后完整 `npm run test:visual` 12 项通过。未提交代码或截图。
 
 ## 问题与结果
 
@@ -37,14 +37,15 @@
 | `npm run test:visual` | 迁移初次 12 项失败，原因为原整页基线尺寸不匹配或新增共享区域基线缺失，符合截图边界变化 |
 | `npm run test:visual -- --grep 'App shell desktop'` | 复核中确认导航固定为 244×900px，与最初自动生成的 244×1475px 候选不同，需使用修正后的候选 |
 | `npm run test:visual:update` | 最终 12 项更新模式完成，生成全部 15 张分区候选；不代表人工批准或视觉验收通过 |
+| `npm run test:visual`（人工批准后） | 完整 12 项通过，使用已批准的 15 张分区基线，未更新截图 |
 | `git diff --check` | 通过 |
 | `npm run test:docs` | 未运行（未修改检查器，不适用） |
 
 已目视检查全部分区：导航、顶栏与内容没有重复截取，长内容与长选项保留，桌面导航高度固定为 900px。未执行独立人工全流程或屏幕阅读器验收。隔离实验在一次完整 22 项之后单独运行通过，不将两次运行描述为同次完整 23 项回归。
 
-## 候选图与后续审核
+## 已批准基线与审核记录
 
-| 区域 | 候选图 |
+| 区域 | 已批准基线 |
 | --- | --- |
 | 导航 | [桌面](../../tests/visual.spec.ts-snapshots/navigation-desktop-chromium-darwin.png)、[紧凑](../../tests/visual.spec.ts-snapshots/navigation-compact-chromium-darwin.png)、[移动](../../tests/visual.spec.ts-snapshots/navigation-mobile-chromium-darwin.png) |
 | 顶栏 | [桌面](../../tests/visual.spec.ts-snapshots/topbar-desktop-chromium-darwin.png)、[紧凑](../../tests/visual.spec.ts-snapshots/topbar-compact-chromium-darwin.png)、[移动](../../tests/visual.spec.ts-snapshots/topbar-mobile-chromium-darwin.png) |
@@ -54,4 +55,4 @@
 | Trace Compare 内容 | [桌面](../../tests/visual.spec.ts-snapshots/trace-compare-desktop-chromium-darwin.png)、[移动](../../tests/visual.spec.ts-snapshots/trace-compare-mobile-chromium-darwin.png) |
 | Trace Compare 弹层 | [桌面](../../tests/visual.spec.ts-snapshots/trace-compare-picker-desktop-chromium-darwin.png)、[移动](../../tests/visual.spec.ts-snapshots/trace-compare-picker-mobile-chromium-darwin.png) |
 
-分区候选尚未人工批准。审核时重点确认裁剪边界、导航固定高度、弹层范围及现有内容是否完整。批准后再运行完整 `npm run test:visual`，不能把更新模式通过当作视觉验收通过。先前的整页基线对比结果不直接适用于此次分区方案。
+2026-11-06，用户在本会话明确回复“人工审核通过”，批准本次 15 张分区基线。随后运行完整 `npm run test:visual`，12 项通过，覆盖所有分区，未使用更新模式或再次修改截图。分区视觉审核与批准后自动对比均已完成；此批准不代表自动提交或合并，也不替代未执行的独立辅助技术验收。先前的整页基线结果作为历史记录保留。
