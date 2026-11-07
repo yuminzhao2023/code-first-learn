@@ -2,10 +2,8 @@ import { selectTrace } from './helpers/trace-picker';
 import { test, expect } from '@playwright/test';
 
 /**
- * Visual snapshots are NOT shipped as "approved" baselines.
- * First inspect the page manually, then run:
- *   npm run test:visual:update
- * Review PNGs before committing them. Never auto-approve a regression.
+ * Generate and compare screenshots with npm run test:visual in the canonical
+ * container. Review candidates before approving or committing new baselines.
  */
 
 // Shared chrome is checked once per layout, independently of page content height.

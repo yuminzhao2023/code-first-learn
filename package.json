@@ -11,9 +11,10 @@
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "test:e2e": "playwright test tests/behavior.spec.ts",
-    "test:visual": "playwright test tests/visual.spec.ts",
-    "test:visual:update": "playwright test tests/visual.spec.ts --update-snapshots",
-    "test": "playwright test"
+    "test:visual": "node scripts/run-visual.mjs",
+    "test:visual:update": "node scripts/run-visual.mjs --update-snapshots",
+    "test:visual:docker": "node scripts/run-visual.mjs",
+    "test": "npm run test:e2e && npm run test:visual"
   },
   "dependencies": {
     "react": "^19.3.0",

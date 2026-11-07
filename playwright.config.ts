@@ -10,13 +10,15 @@ export default defineConfig({
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
     reducedMotion: "reduce",
+    locale: "en-US",
+    timezoneId: "UTC",
+    deviceScaleFactor: 1,
   },
   projects: [
     {
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
-        channel: "chrome",
         viewport: { width: 1440, height: 900 },
       },
     },

@@ -1,0 +1,15 @@
+services:
+  visual:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile.visual
+    init: true
+    shm_size: 1gb
+    environment:
+      CI: "1"
+      TZ: UTC
+    volumes:
+      - ./tests/visual.spec.ts-snapshots:/workspace/tests/visual.spec.ts-snapshots
+      - ./test-results:/workspace/test-results
+    command: ./node_modules/.bin/playwright test tests/visual.spec.ts

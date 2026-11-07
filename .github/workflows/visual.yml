@@ -1,0 +1,25 @@
+name: Visual regression
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  visual:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Compare screenshots in the canonical container
+        run: npm run test:visual
+      - name: Upload screenshot differences
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-test-results
+          path: |
+            test-results/
+            tests/visual.spec.ts-snapshots/*-chromium-linux.png
+          if-no-files-found: ignore
