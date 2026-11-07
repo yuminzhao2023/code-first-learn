@@ -2,7 +2,7 @@ import { selectTrace } from './helpers/trace-picker';
 import { test, expect } from '@playwright/test';
 
 /**
- * Generate and compare screenshots with npm run test:visual in the canonical
+ * Generate and compare screenshots with npm run test:visual:docker in the canonical
  * container. Review candidates before approving or committing new baselines.
  */
 

@@ -35,7 +35,7 @@ npm run typecheck
 npm run build
 npx playwright install chromium
 npm run test:e2e
-npm run test:visual
+npm run test:visual:docker
 ```
 
 `npm run docs:check` 检查实际 Markdown 链接与规范链接依赖；修改检查器时运行 `npm run test:docs` 验证解析边界。检查器不判断自然语言阅读要求或引用是否必要。
@@ -44,7 +44,7 @@ npm run test:visual
 
 行为测试覆盖页面交互和路由，视觉测试将共享导航、顶栏与页面内容分别对比：共享区域覆盖桌面、紧凑和移动布局，内容区域覆盖四个桌面页面及 Metrics、Error Analysis、Trace Compare 的移动端，并单独检查 Trace Compare 弹层。具体用例以 `tests/` 为准；单次检查是否通过，以实际运行结果为准。
 
-视觉测试对比当前页面与参考截图，不能自动判断页面是否美观或符合需求。`npm run test:visual` 是 `npm run test:visual:docker` 的别名，都会构建容器并在其中运行测试；可用 `npm run test:visual -- --grep 'Trace Compare'` 限定用例。截图和 diff 保存在本机 `test-results/`。容器固定了 Linux 系统、浏览器版本、字体环境与时区；本机直接执行 Playwright 生成的截图不能作为统一基线。
+视觉测试对比当前页面与参考截图，不能自动判断页面是否美观或符合需求。`npm run test:visual:docker` 会构建容器并在其中运行测试；可用 `npm run test:visual:docker -- --grep 'Trace Compare'` 限定用例。截图和 diff 保存在本机 `test-results/`。容器固定了 Linux 系统、浏览器版本、字体环境与时区；本机直接执行 Playwright 生成的截图不能作为统一基线。
 
 现有 `chromium-darwin` 截图是此前批准的 macOS 基线。迁移时先运行容器测试确认缺少 Linux 基线，再生成 `chromium-linux` 候选图，逐张审核后方可替换旧基线。迁移期间的缺失基线不代表视觉回归通过。
 
@@ -54,7 +54,7 @@ npm run test:visual
 npm run test:visual:update
 ```
 
-该命令会在同一容器中更新所有视觉用例。检查 `tests/visual.spec.ts-snapshots/` 中的 PNG 和无关改动，人工批准后才能提交基线，再运行 `npm run test:visual`。失败截图和 diff 位于 `test-results/`。完整要求见目录入口中的验证规范。
+该命令会在同一容器中更新所有视觉用例。检查 `tests/visual.spec.ts-snapshots/` 中的 PNG 和无关改动，人工批准后才能提交基线，再运行 `npm run test:visual:docker`。失败截图和 diff 位于 `test-results/`。完整要求见目录入口中的验证规范。
 
 ## 页面复用示例
 

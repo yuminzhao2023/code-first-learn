@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 22
       - name: Compare screenshots in the canonical container
-        run: npm run test:visual
+        run: npm run test:visual:docker
       - name: Upload screenshot differences
         if: failure()
         uses: actions/upload-artifact@v4
