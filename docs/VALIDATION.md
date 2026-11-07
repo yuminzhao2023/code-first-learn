@@ -49,7 +49,7 @@ npm run test:visual:docker
 
 ## 3. 视觉基线与批准
 
-视觉命令通过 Docker Compose 在 `Dockerfile.visual` 固定的 Linux Playwright 镜像中运行，Mac、Windows 和 CI 均以此环境生成和比较截图。`npm run test:visual:docker -- --grep '用例名'` 等筛选参数会透传给容器内的 Playwright。更新 Playwright 依赖时同步更新镜像版本；本机直接运行 Playwright 的截图结果不用于批准统一基线。
+`npm run test:visual` 在本机运行，可用于检查当前系统的截图差异；`npm run test:visual:docker` 通过 Docker Compose 在 `Dockerfile.visual` 固定的 Linux Playwright 镜像中运行，Mac、Windows 和 CI 均以此环境生成和比较统一基线。`npm run test:visual:docker -- --grep '用例名'` 等筛选参数会透传给容器内的 Playwright。更新 Playwright 依赖时同步更新镜像版本；本机直接运行 Playwright 的截图结果不用于批准统一基线。
 
 1. 先运行 `npm run test:visual:docker`，检查实际截图、预期截图和 PNG diff。
 2. 判断差异是回归、预期设计变化，还是浏览器、字体或操作系统差异；回归应先修复。
