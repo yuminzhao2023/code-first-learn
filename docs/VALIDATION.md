@@ -23,7 +23,7 @@ npm run docs:check
 npm run typecheck
 npm run build
 npm run test:e2e
-npm run test:visual
+npm run test:visual:docker
 ```
 
 可用 `npm run test:e2e -- --grep 'Trace Explorer'` 等方式限定相关用例；若筛选未匹配任何用例，不算验证完成。共享变更使用完整命令。
@@ -49,11 +49,13 @@ npm run test:visual
 
 ## 3. 视觉基线与批准
 
-1. 先运行 `npm run test:visual`，检查实际截图、预期截图和 PNG diff。
+`npm run test:visual` 在本机运行，可用于检查当前系统的截图差异；`npm run test:visual:docker` 通过 Docker Compose 在 `Dockerfile.visual` 固定的 Linux Playwright 镜像中运行，Mac、Windows 和 CI 均以此环境生成和比较统一基线。`npm run test:visual:docker -- --grep '用例名'` 等筛选参数会透传给容器内的 Playwright。更新 Playwright 依赖时同步更新镜像版本；本机直接运行 Playwright 的截图结果不用于批准统一基线。
+
+1. 先运行 `npm run test:visual:docker`，检查实际截图、预期截图和 PNG diff。
 2. 判断差异是回归、预期设计变化，还是浏览器、字体或操作系统差异；回归应先修复。
 3. 首次缺少基线或预期设计变化需要新参考图时，明确说明更新范围，再有意运行 `npm run test:visual:update`；该命令会更新所有视觉用例，应检查是否产生无关改动。
 4. 人工审阅生成的 PNG 和差异，取得批准后才能将新基线作为验收依据或提交到版本控制。未获批准时保留审核状态，不宣称视觉回归通过。
-5. 基线获批后重新运行 `npm run test:visual`，确认对比通过。
+5. 基线获批后重新运行 `npm run test:visual:docker`，确认对比通过。
 
 不得为了让测试变绿而批量接受差异。生成候选截图与人工批准是两个步骤；截图对比通过也不能替代产品和设计验收。
 

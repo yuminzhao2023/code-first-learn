@@ -33,18 +33,20 @@ npm run dev
 npm run docs:check
 npm run typecheck
 npm run build
-npx playwright install chrome
+npx playwright install chromium
 npm run test:e2e
-npm run test:visual
+npm run test:visual:docker
 ```
 
 `npm run docs:check` 检查实际 Markdown 链接与规范链接依赖；修改检查器时运行 `npm run test:docs` 验证解析边界。检查器不判断自然语言阅读要求或引用是否必要。
 
-当前 Playwright 配置使用 `channel: 'chrome'`，需要本机 Google Chrome；安装命令用于尚未安装 Chrome 的环境。
+行为测试使用 Playwright 随依赖版本安装的 Chromium，可在本机运行。视觉测试通过 Docker Compose 在固定的 Linux Playwright 镜像中运行，Mac、Windows 和 CI 使用同一截图环境；需要安装 Docker Desktop 或 Docker Engine 与 Compose。镜像版本与 `package-lock.json` 中的 Playwright 版本保持一致，升级 Playwright 时须同时更新 `Dockerfile.visual`。
 
 行为测试覆盖页面交互和路由，视觉测试将共享导航、顶栏与页面内容分别对比：共享区域覆盖桌面、紧凑和移动布局，内容区域覆盖四个桌面页面及 Metrics、Error Analysis、Trace Compare 的移动端，并单独检查 Trace Compare 弹层。具体用例以 `tests/` 为准；单次检查是否通过，以实际运行结果为准。
 
-视觉测试对比当前页面与参考截图，不能自动判断页面是否美观或符合需求。仓库已有截图文件，但它们是否适合当前改动与运行环境，仍需审阅。操作系统、字体和浏览器版本都可能影响结果。
+视觉测试对比当前页面与参考截图，不能自动判断页面是否美观或符合需求。`npm run test:visual` 在本机运行，方便检查当前系统的截图差异；`npm run test:visual:docker` 会构建容器并在统一环境中运行，是跨平台回归与基线批准的依据。两者均可用 `-- --grep 'Trace Compare'` 限定用例，截图和 diff 保存在本机 `test-results/`。容器固定了 Linux 系统、浏览器版本、字体环境与时区；本机直接执行 Playwright 生成的截图不能作为统一基线。
+
+现有 `chromium-darwin` 截图是此前批准的 macOS 基线。迁移时先运行容器测试确认缺少 Linux 基线，再生成 `chromium-linux` 候选图，逐张审核后方可替换旧基线。迁移期间的缺失基线不代表视觉回归通过。
 
 首次建立或有意更新基线时，先查看页面与差异，再生成候选截图：
 
@@ -52,7 +54,7 @@ npm run test:visual
 npm run test:visual:update
 ```
 
-该命令会更新所有视觉用例。检查 `tests/visual.spec.ts-snapshots/` 中的 PNG 和无关改动，人工批准后才能提交基线，再运行 `npm run test:visual`。失败截图和 diff 通常位于 `test-results/`。完整要求见目录入口中的验证规范。
+该命令会在同一容器中更新所有视觉用例。检查 `tests/visual.spec.ts-snapshots/` 中的 PNG 和无关改动，人工批准后才能提交基线，再运行 `npm run test:visual:docker`。失败截图和 diff 位于 `test-results/`。完整要求见目录入口中的验证规范。
 
 ## 页面复用示例
 
