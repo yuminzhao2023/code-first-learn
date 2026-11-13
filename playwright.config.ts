@@ -1,38 +1,38 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: "./tests",
+  testDir: './tests',
   fullyParallel: true,
   retries: 0,
-  reporter: "list",
+  reporter: 'list',
   use: {
-    baseURL: "http://127.0.0.1:5173",
-    trace: "retain-on-failure",
-    screenshot: "only-on-failure",
-    reducedMotion: "reduce",
-    locale: "en-US",
-    timezoneId: "UTC",
+    baseURL: 'http://127.0.0.1:5173',
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    reducedMotion: 'reduce',
+    locale: 'en-US',
+    timezoneId: 'UTC',
     deviceScaleFactor: 1,
   },
   projects: [
     {
-      name: "chromium",
+      name: 'chromium',
       use: {
-        ...devices["Desktop Chrome"],
+        ...devices['Desktop Chrome'],
         viewport: { width: 1440, height: 900 },
       },
     },
   ],
   webServer: {
-    command: "npm run dev",
-    url: "http://127.0.0.1:5173",
+    command: 'npm run dev',
+    url: 'http://127.0.0.1:5173',
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
   },
   expect: {
     toHaveScreenshot: {
-      animations: "disabled",
-      caret: "hide",
+      animations: 'disabled',
+      caret: 'hide',
       maxDiffPixels: 10,
       threshold: 0.01,
     },

@@ -11,8 +11,8 @@
 以下示例的重置和翻页由调用方提供实际处理函数：
 
 ```tsx
-import { Button } from "../../../src/components/ui/Button";
-import { Icon } from "../../../src/components/ui/Icon";
+import { Button } from '../../../src/components/ui/Button';
+import { Icon } from '../../../src/components/ui/Icon';
 
 export function ButtonExample({
   onReset,

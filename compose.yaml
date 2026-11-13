@@ -7,7 +7,7 @@ services:
     init: true
     shm_size: 1gb
     environment:
-      CI: "1"
+      CI: '1'
       TZ: UTC
     volumes:
       - ./tests/visual.spec.ts-snapshots:/workspace/tests/visual.spec.ts-snapshots
