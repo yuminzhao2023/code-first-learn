@@ -15,6 +15,9 @@ test('Trace Explorer: search, select, reset and filter', async ({ page }) => {
   await expect(
     page.getByRole('heading', { name: 'Trace Explorer' }),
   ).toBeVisible();
+  await expect(page.getByText('FIXED MOCK')).toBeVisible();
+  await expect(page.getByText('Last 24 hours')).toHaveCount(0);
+  await expect(page.getByText('⌘ K')).toHaveCount(0);
   await expect(
     page.getByRole('button', { name: /analyze_market_signals/ }),
   ).toBeVisible();
@@ -73,6 +76,39 @@ test('LLM Metrics: reuses app shell and filters model rows', async ({
   await expect(page.locator('.model-table tbody tr')).toHaveCount(1);
   await expect(page.locator('.model-table')).toContainText('GPT-6');
   await expect(page.locator('.model-table')).not.toContainText('Gemini');
+  await expect(
+    page.getByText('Illustrative fixed series · unaffected by model filter'),
+  ).toHaveCount(2);
+  await expect(
+    page.getByRole('img', {
+      name: /latency trend.*182 ms at the start.*109 ms at the end.*109 to 191 ms/i,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('img', {
+      name: /request trend.*32 requests at the start.*94 at the end.*32 to 98 requests/i,
+    }),
+  ).toBeVisible();
+  const latencyValues = page.getByRole('table', {
+    name: 'Daily latency values · fixed illustrative data',
+  });
+  const requestValues = page.getByRole('table', {
+    name: 'Daily request values · fixed illustrative data',
+  });
+  await expect(latencyValues.locator('tbody tr')).toHaveCount(14);
+  await expect(requestValues.locator('tbody tr')).toHaveCount(14);
+  await expect(
+    latencyValues.locator('tbody tr').first().getByRole('rowheader'),
+  ).toHaveText('Oct 21');
+  await expect(
+    latencyValues.locator('tbody tr').first().getByRole('cell'),
+  ).toHaveText('182 ms');
+  await expect(
+    requestValues.locator('tbody tr').last().getByRole('rowheader'),
+  ).toHaveText('Nov 3');
+  await expect(
+    requestValues.locator('tbody tr').last().getByRole('cell'),
+  ).toHaveText('94 requests');
 
   await page
     .getByRole('combobox', { name: 'Filter by model' })
@@ -201,7 +237,7 @@ test('Error Analysis: aggregates failed executions, filters, sorts and preserves
     .selectOption('Gemini');
   await expect(page.getByTestId('failed-count')).toHaveText('0');
   await expect(page.getByTestId('service-count')).toHaveText('0');
-  await expect(page.getByTestId('common-error')).toHaveText('暂无异常');
+  await expect(page.getByTestId('common-error')).toHaveText('No exceptions');
   await expect(page.getByText('No exception selected.')).toBeVisible();
   await expect(page.getByText(/No matching exceptions/)).toBeVisible();
   await page.getByRole('button', { name: 'Reset filters' }).click();
@@ -265,7 +301,7 @@ test('Error Analysis: related Trace links survive refresh and invalid links fall
   await page
     .getByRole('textbox', { name: 'Search errors' })
     .fill('tr-error-1-1');
-  await page.getByRole('link', { name: '查看 Trace' }).click();
+  await page.getByRole('link', { name: 'View Trace' }).click();
   await expect(page).toHaveURL(/\/\?trace=tr-error-1-1$/);
   await expect(
     page.getByRole('region', { name: 'Waterfall for generate_risk_report' }),

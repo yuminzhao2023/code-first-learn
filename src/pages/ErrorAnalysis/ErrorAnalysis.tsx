@@ -105,7 +105,7 @@ export function ErrorAnalysis() {
             Most common exception <Icon name="bolt" />
           </div>
           <div className="error-common" data-testid="common-error">
-            {common?.name ?? '暂无异常'}
+            {common?.name ?? 'No exceptions'}
           </div>
           <p>
             {common
@@ -283,7 +283,7 @@ export function ErrorAnalysis() {
                     <div>{event.operation}</div>
                     <code>{event.traceId}</code>
                     <Link to={`/?trace=${encodeURIComponent(event.traceId)}`}>
-                      查看 Trace <Icon name="external" size={14} />
+                      View Trace <Icon name="external" size={14} />
                     </Link>
                   </li>
                 ))}

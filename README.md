@@ -19,7 +19,7 @@ _Reference screenshot from the tracked Linux baseline. Screenshots are reviewed 
 
 All traces, requests, costs and performance values are **deterministic fixtures, not production measurements**. The app has no backend, real model calls, authentication, streaming, or OpenTelemetry/Sentry integration. It does not claim large-data performance or AI agent runtime capabilities.
 
-Overall P95 is intentionally unavailable: individual model quantiles cannot be averaged into a valid combined quantile without request-level samples or a mergeable distribution. Selecting one model displays its fixture P95. Daily charts remain fixed illustrative trends.
+Overall P95 is intentionally unavailable: individual model quantiles cannot be averaged into a valid combined quantile without request-level samples or a mergeable distribution. Selecting one model displays its fixture P95. Daily charts are fixed illustrative series and do not change with the model filter.
 
 ## Run locally
 
@@ -100,4 +100,6 @@ Component contracts: [Button](docs/components/ui/Button.md), [MetricCard](docs/c
 
 The documentation checker validates local Markdown link targets and standard-document dependency cycles. It does not verify external links, prose accuracy, anchors, or screenshot approval.
 
-**Usage permission:** this example's code may be used for personal learning and modification. No third-party images, brand assets or proprietary SDKs are included.
+## License and reuse
+
+This repository is a portfolio example and does not include an open-source license. You may read, run, and modify its code for personal learning. For redistribution or commercial use, contact the author for permission. No third-party images, brand assets, or proprietary SDKs are included.

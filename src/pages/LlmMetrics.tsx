@@ -8,6 +8,43 @@ import { Icon } from '../components/ui/Icon';
 import { MetricCard } from '../components/ui/MetricCard';
 import { LatencyChart } from '../components/observability/LatencyChart';
 
+function TrendDataTable({
+  title,
+  values,
+  unit,
+}: {
+  title: string;
+  values: readonly number[];
+  unit: string;
+}) {
+  return (
+    <table className="sr-only">
+      <caption>{title} · fixed illustrative data</caption>
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {values.map((value, index) => (
+          <tr key={index}>
+            <th scope="row">
+              {new Date(Date.UTC(2026, 9, 21 + index)).toLocaleDateString(
+                'en-US',
+                { month: 'short', day: 'numeric', timeZone: 'UTC' },
+              )}
+            </th>
+            <td>
+              {value} {unit}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
 export function LlmMetrics() {
   const [model, setModel] = useState<'all' | Model>('all');
   const [sortCostDescending, setSortCostDescending] = useState(false);
@@ -107,7 +144,7 @@ export function LlmMetrics() {
       <div className="metrics-panels">
         <Card
           title="Latency Trend"
-          subtitle="Daily average response time · fixed sample"
+          subtitle="Illustrative fixed series · unaffected by model filter"
           action={
             <span className="mini-label">
               <i className="legend-dot llm" />
@@ -116,10 +153,15 @@ export function LlmMetrics() {
           }
         >
           <LatencyChart data={latencyDaily} />
+          <TrendDataTable
+            title="Daily latency values"
+            values={latencyDaily}
+            unit="ms"
+          />
         </Card>
         <Card
           title="Request Activity"
-          subtitle="Requests per day · 14-day trend"
+          subtitle="Illustrative fixed series · unaffected by model filter"
           action={
             <span className="mini-label">
               <i className="legend-dot agent" />
@@ -130,7 +172,7 @@ export function LlmMetrics() {
           <div
             className="bar-chart"
             role="img"
-            aria-label="14-day request activity bar chart"
+            aria-label={`14-day illustrative request trend, Oct 21 to Nov 03: ${requestsDaily[0]} requests at the start, ${requestsDaily.at(-1)} at the end; daily range ${Math.min(...requestsDaily)} to ${Math.max(...requestsDaily)} requests. Unaffected by model filter.`}
           >
             {requestsDaily.map((n, i) => (
               <div key={i} className="bar-chart-col" title={`${n} requests`}>
@@ -142,6 +184,11 @@ export function LlmMetrics() {
             <span>Oct 21</span>
             <span>Nov 03</span>
           </div>
+          <TrendDataTable
+            title="Daily request values"
+            values={requestsDaily}
+            unit="requests"
+          />
         </Card>
       </div>
       <Card
