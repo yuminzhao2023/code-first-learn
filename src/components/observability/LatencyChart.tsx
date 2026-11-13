@@ -9,8 +9,10 @@ export function LatencyChart({
     h = 210,
     xPad = 12,
     yPad = 14;
-  const max = Math.max(...data) * 1.12;
-  const min = Math.min(...data) * 0.8;
+  const dataMax = Math.max(...data);
+  const dataMin = Math.min(...data);
+  const max = dataMax * 1.12;
+  const min = dataMin * 0.8;
   const points = data.map((n, i) => {
     const x = xPad + (i / (data.length - 1)) * (w - xPad * 2);
     const y = yPad + (1 - (n - min) / (max - min)) * (h - yPad * 2);
@@ -29,7 +31,7 @@ export function LatencyChart({
         viewBox={`0 0 ${w} ${h}`}
         preserveAspectRatio="none"
         role="img"
-        aria-label="14-day latency trend line chart"
+        aria-label={`14-day illustrative latency trend, Oct 21 to Nov 03: ${data[0]} ms at the start, ${data.at(-1)} ms at the end; daily range ${dataMin} to ${dataMax} ms. Unaffected by model filter.`}
       >
         <defs>
           <linearGradient id="latencyFade" x1="0" y1="0" x2="0" y2="1">

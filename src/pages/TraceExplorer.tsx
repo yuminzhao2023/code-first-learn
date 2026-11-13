@@ -94,11 +94,6 @@ export function TraceExplorer() {
           </p>
         </div>
         <div className="heading-actions">
-          <span className="period-control">
-            <Icon name="clock" size={15} />
-            Last 24 hours
-            <Icon name="chevron" size={14} />
-          </span>
           <Button variant="primary" onClick={resetFilters}>
             <Icon name="filter" size={15} /> Reset filters
           </Button>
@@ -150,7 +145,6 @@ export function TraceExplorer() {
               value={search}
               onChange={(e) => updateSearch(e.target.value)}
             />
-            <span className="kbd">/</span>
           </label>
           <label className="filter-select">
             <Icon name="filter" size={16} />

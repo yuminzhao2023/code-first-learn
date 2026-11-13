@@ -79,8 +79,6 @@ export function AppShell() {
             <span className="health-marker">
               <span className="live-dot" /> Sample data loaded
             </span>
-            <span className="topbar-divider" />
-            <span className="keyboard-hint">⌘ K</span>
           </div>
         </div>
         <div className="content-wrap">
