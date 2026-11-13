@@ -245,3 +245,7 @@ export const latencyDaily = [
 export const requestsDaily = [
   32, 46, 40, 58, 63, 55, 71, 69, 77, 73, 86, 91, 98, 94,
 ];
+
+export const trendDates = Array.from({ length: 14 }, (_, index) =>
+  new Date(Date.UTC(2026, 9, 21 + index)).toISOString().slice(0, 10),
+);

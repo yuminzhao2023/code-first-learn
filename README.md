@@ -21,6 +21,8 @@ All traces, requests, costs and performance values are **deterministic fixtures,
 
 Overall P95 is intentionally unavailable: individual model quantiles cannot be averaged into a valid combined quantile without request-level samples or a mergeable distribution. Selecting one model displays its fixture P95. Daily charts remain fixed illustrative trends.
 
+Trace Explorer overview cards are fixed sample values independent of table filters. The Metrics cards derive their displayed values from the selected model, but this fixture has no previous-period data, so no period-over-period change is shown. Daily chart values cover the fixed sample dates October 21–November 3, 2026.
+
 ## Run locally
 
 Use Node.js 22.13+ within 22.x, or 24+, and npm. `.nvmrc` selects the latest installed/retrieved Node 22 release, matching CI; the minimum supports the lint toolchain. No environment variables are required.
@@ -100,4 +102,4 @@ Component contracts: [Button](docs/components/ui/Button.md), [MetricCard](docs/c
 
 The documentation checker validates local Markdown link targets and standard-document dependency cycles. It does not verify external links, prose accuracy, anchors, or screenshot approval.
 
-**Usage permission:** this example's code may be used for personal learning and modification. No third-party images, brand assets or proprietary SDKs are included.
+**License:** [MIT](LICENSE). No third-party images, brand assets or proprietary SDKs are included.

@@ -1,8 +1,10 @@
 export function LatencyChart({
   data,
+  dates,
   color = 'var(--color-accent)',
 }: {
-  data: number[];
+  data: readonly number[];
+  dates: readonly string[];
   color?: string;
 }) {
   const w = 800,
@@ -64,6 +66,25 @@ export function LatencyChart({
         <span>Oct 25</span>
         <span>Oct 29</span>
         <span>Nov 03</span>
+      </div>
+      <div className="sr-only">
+        <table>
+          <caption>Daily average latency · fixed sample</caption>
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Milliseconds</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((latency, index) => (
+              <tr key={dates[index]}>
+                <th scope="row">{dates[index]}</th>
+                <td>{latency}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

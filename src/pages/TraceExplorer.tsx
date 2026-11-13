@@ -96,8 +96,7 @@ export function TraceExplorer() {
         <div className="heading-actions">
           <span className="period-control">
             <Icon name="clock" size={15} />
-            Last 24 hours
-            <Icon name="chevron" size={14} />
+            Nov 03, 2026 · fixed sample
           </span>
           <Button variant="primary" onClick={resetFilters}>
             <Icon name="filter" size={15} /> Reset filters
@@ -108,31 +107,31 @@ export function TraceExplorer() {
         <MetricCard
           label="Total Traces"
           value="29,060"
-          delta="+12.8%"
+          note="Fixed overview · independent of filters"
           icon={<Icon name="layers" size={19} />}
         />
         <MetricCard
           label="Success Rate"
           value="98.4%"
-          delta="+0.6%"
+          note="Fixed overview · independent of filters"
           icon={<Icon name="shield" size={19} />}
         />
         <MetricCard
           label="Avg. Duration"
           value="1.84s"
-          delta="-8.2%"
+          note="Fixed overview · independent of filters"
           icon={<Icon name="clock" size={19} />}
         />
         <MetricCard
           label="Total Tokens"
           value="61.8M"
-          delta="+14.3%"
+          note="Fixed overview · independent of filters"
           icon={<Icon name="bolt" size={19} />}
         />
       </div>
       <Card
         title="Recent Traces"
-        subtitle="Explore the latest recorded agent executions"
+        subtitle="Explore sampled agent executions"
         className="trace-card"
         action={
           <span className="table-count">

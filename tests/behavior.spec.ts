@@ -15,6 +15,13 @@ test('Trace Explorer: search, select, reset and filter', async ({ page }) => {
   await expect(
     page.getByRole('heading', { name: 'Trace Explorer' }),
   ).toBeVisible();
+  await expect(page.getByText('Nov 03, 2026 · fixed sample')).toBeVisible();
+  await expect(page.locator('.metrics-grid')).toContainText(
+    'Fixed overview · independent of filters',
+  );
+  await expect(page.locator('.metrics-grid')).not.toContainText(
+    'vs. previous period',
+  );
   await expect(
     page.getByRole('button', { name: /analyze_market_signals/ }),
   ).toBeVisible();
@@ -66,6 +73,26 @@ test('LLM Metrics: reuses app shell and filters model rows', async ({
       .getByRole('link', { name: 'Trace Explorer' }),
   ).toBeVisible();
   await expect(page.locator('.model-table tbody tr')).toHaveCount(3);
+  await expect(page.locator('.metrics-grid')).toContainText(
+    'All models · fixed sample',
+  );
+  await expect(page.locator('.metrics-grid')).not.toContainText(
+    'vs. previous period',
+  );
+  const latencyValues = page.getByRole('table', {
+    name: 'Daily average latency · fixed sample',
+  });
+  const requestValues = page.getByRole('table', {
+    name: 'Daily request counts · fixed sample',
+  });
+  await expect(latencyValues.locator('tbody tr')).toHaveCount(14);
+  await expect(requestValues.locator('tbody tr')).toHaveCount(14);
+  await expect(latencyValues.locator('tbody tr').first()).toContainText(
+    '2026-10-21',
+  );
+  await expect(requestValues.locator('tbody tr').last()).toContainText(
+    '2026-11-03',
+  );
 
   await page
     .getByRole('combobox', { name: 'Filter by model' })
@@ -73,6 +100,9 @@ test('LLM Metrics: reuses app shell and filters model rows', async ({
   await expect(page.locator('.model-table tbody tr')).toHaveCount(1);
   await expect(page.locator('.model-table')).toContainText('GPT-6');
   await expect(page.locator('.model-table')).not.toContainText('Gemini');
+  await expect(page.locator('.metrics-grid')).toContainText(
+    'Selected model · fixed sample',
+  );
 
   await page
     .getByRole('combobox', { name: 'Filter by model' })

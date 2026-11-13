@@ -1,5 +1,10 @@
 import { useMemo, useState } from 'react';
-import { latencyDaily, modelStats, requestsDaily } from '../data/mock';
+import {
+  latencyDaily,
+  modelStats,
+  requestsDaily,
+  trendDates,
+} from '../data/mock';
 import { compact, dollars, milliseconds } from '../lib/format';
 import type { Model } from '../types/observability';
 import { Button } from '../components/ui/Button';
@@ -42,6 +47,10 @@ export function LlmMetrics() {
   const errorRate = summed.requests
     ? (summed.weightedErrors / summed.requests).toFixed(1)
     : '0';
+  const sampleNote =
+    model === 'all'
+      ? 'All models · fixed sample'
+      : 'Selected model · fixed sample';
 
   return (
     <>
@@ -77,7 +86,7 @@ export function LlmMetrics() {
         <MetricCard
           label="Total Requests"
           value={compact(summed.requests)}
-          delta="+11.7%"
+          note={sampleNote}
           icon={<Icon name="layers" size={19} />}
         />
         <MetricCard
@@ -93,14 +102,13 @@ export function LlmMetrics() {
         <MetricCard
           label="Estimated Cost"
           value={dollars(summed.costUsd)}
-          delta="+4.2%"
-          tone="neutral"
+          note={sampleNote}
           icon={<Icon name="chart" size={19} />}
         />
         <MetricCard
           label="Error Rate"
           value={`${errorRate}%`}
-          delta="-0.3%"
+          note={sampleNote}
           icon={<Icon name="shield" size={19} />}
         />
       </div>
@@ -115,7 +123,7 @@ export function LlmMetrics() {
             </span>
           }
         >
-          <LatencyChart data={latencyDaily} />
+          <LatencyChart data={latencyDaily} dates={trendDates} />
         </Card>
         <Card
           title="Request Activity"
@@ -141,6 +149,25 @@ export function LlmMetrics() {
           <div className="bar-chart-footer">
             <span>Oct 21</span>
             <span>Nov 03</span>
+          </div>
+          <div className="sr-only">
+            <table>
+              <caption>Daily request counts · fixed sample</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Requests</th>
+                </tr>
+              </thead>
+              <tbody>
+                {requestsDaily.map((count, index) => (
+                  <tr key={trendDates[index]}>
+                    <th scope="row">{trendDates[index]}</th>
+                    <td>{count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </Card>
       </div>

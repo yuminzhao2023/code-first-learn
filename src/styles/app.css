@@ -280,28 +280,12 @@ button:disabled {
   color: #d9e1f4;
   font-weight: 550;
 }
-.topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  font-size: 11px;
-}
 .health-marker {
   display: flex;
   align-items: center;
   gap: 9px;
   color: #aab8c8;
-}
-.topbar-divider {
-  height: 20px;
-  border-right: 1px solid var(--color-border);
-}
-.keyboard-hint {
-  border: 1px solid var(--color-border);
-  border-radius: 5px;
   font-size: 11px;
-  color: #8c99b2;
-  padding: 1px 7px;
 }
 .content-wrap {
   max-width: var(--page-max-width);
@@ -1027,8 +1011,7 @@ button:disabled {
     padding: 0 16px;
     height: 48px;
   }
-  .health-marker,
-  .topbar-divider {
+  .health-marker {
     display: none;
   }
   .content-wrap {

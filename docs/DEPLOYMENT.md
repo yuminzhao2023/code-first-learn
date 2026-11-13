@@ -11,7 +11,7 @@ The checked-in [vercel.json](../vercel.json) selects Vite, runs `npm run build`,
 3. Confirm the build command is `npm run build` and the output directory is `dist`.
 4. Create a preview deployment and perform the checks below before promoting it.
 
-This repository contains deployment configuration, not evidence of an actual deployment. No deployment is created by running the local checks. `Dockerfile.visual` is exclusively a screenshot-test environment.
+The repository contains deployment configuration and README links to a demo. Local checks do not verify the hosted deployment; use the preview checks below before treating it as validated. `Dockerfile.visual` is exclusively a screenshot-test environment.
 
 ## Local production check
 

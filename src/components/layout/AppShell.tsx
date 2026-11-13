@@ -75,13 +75,9 @@ export function AppShell() {
             Workspace <span>/</span> Observability <span>/</span>{' '}
             <strong>{activeRoute?.handle.breadcrumb}</strong>
           </div>
-          <div className="topbar-right">
-            <span className="health-marker">
-              <span className="live-dot" /> Sample data loaded
-            </span>
-            <span className="topbar-divider" />
-            <span className="keyboard-hint">⌘ K</span>
-          </div>
+          <span className="health-marker">
+            <span className="live-dot" /> Sample data loaded
+          </span>
         </div>
         <div className="content-wrap">
           <Outlet />
