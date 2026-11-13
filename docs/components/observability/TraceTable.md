@@ -5,17 +5,17 @@
 ## 受控选择示例
 
 ```tsx
-import { useState } from "react";
-import type { Trace } from "../../../src/types/observability";
-import { TraceTable } from "../../../src/components/observability/TraceTable";
+import { useState } from 'react';
+import type { Trace } from '../../../src/types/observability';
+import { TraceTable } from '../../../src/components/observability/TraceTable';
 
 export function TraceTableExample({ rows }: { rows: Trace[] }) {
-  const [selectedId, setSelectedId] = useState("");
+  const [selectedId, setSelectedId] = useState('');
   const selected = rows.find((trace) => trace.id === selectedId) ?? rows[0];
   return (
     <TraceTable
       rows={rows}
-      selectedId={selected?.id ?? ""}
+      selectedId={selected?.id ?? ''}
       onSelect={setSelectedId}
     />
   );

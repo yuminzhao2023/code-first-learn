@@ -20,3 +20,11 @@
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+.waterfall-card .card-header > div {
+  min-width: 0;
+}
+
+.waterfall-card .card-subtitle {
+  overflow-wrap: anywhere;
+}

@@ -6,25 +6,34 @@
 
 完成任务前，先判断改动是否影响运行时行为、类型、构建或视觉，再按下表选择最低检查范围；多类变更取并集，影响不明确时扩大范围。
 
-| 变更类型 | 必须尝试的检查 |
-|---|---|
+| 变更类型                                        | 必须尝试的检查                                                              |
+| ----------------------------------------------- | --------------------------------------------------------------------------- |
 | 仅 Markdown、注释或 JSDoc，不改变类型与运行逻辑 | `npm run docs:check`；检查描述与实现的一致性；组件文档的 TSX 示例做类型检查 |
-| 类型、组件接口或构建配置 | `npm run typecheck`、`npm run build`；按运行时与视觉影响追加下列检查 |
-| 页面行为、业务计算、路由或数据处理 | typecheck、build、相关行为用例 |
-| 布局、样式、文案或交互状态的视觉变化 | typecheck、build、受影响页面的行为与视觉用例；按第 2 节检查页面 |
-| 共享 token、组件的运行时实现或全局布局 | typecheck、build、完整行为与视觉回归，覆盖所有受影响页面 |
-| 文档检查器或其规则 | `npm run test:docs`、`npm run docs:check` |
-| 测试、验证配置或验收规范 | 运行被修改或受新规则影响的检查，确认命令与判定方式可执行 |
+| 类型、组件接口或构建配置                        | `npm run typecheck`、`npm run build`；按运行时与视觉影响追加下列检查        |
+| 页面行为、业务计算、路由或数据处理              | typecheck、build、相关行为用例                                              |
+| 布局、样式、文案或交互状态的视觉变化            | typecheck、build、受影响页面的行为与视觉用例；按第 2 节检查页面             |
+| 共享 token、组件的运行时实现或全局布局          | typecheck、build、完整行为与视觉回归，覆盖所有受影响页面                    |
+| 文档检查器或其规则                              | `npm run test:docs`、`npm run docs:check`                                   |
+| 测试、验证配置或验收规范                        | 运行被修改或受新规则影响的检查，确认命令与判定方式可执行                    |
 
 完整检查命令：
 
 ```bash
 npm run docs:check
+npm run test:docs
+npm run lint
+npm run format:check
 npm run typecheck
 npm run build
 npm run test:e2e
 npm run test:visual:docker
 ```
+
+`npm run check` 执行文档、Lint、全仓格式检查、类型检查，并构建后对生产产物运行完整行为测试，不依赖 Docker。`npm test` 仅运行本机行为测试。生产产物行为测试也可单独运行 `npm run test:e2e:preview`。
+
+测试固定使用 Playwright 配套 Chromium。本机系统不受该版本支持时，在受支持的系统、兼容容器或 CI 环境运行浏览器检查。本机没有 Docker 时，保留统一视觉回归的待验证状态，在 CI 或其他具备 Docker 的环境中完成截图对比。不得把本机行为通过描述为统一视觉通过。
+
+格式检查直接使用 `prettier --check .`，格式化使用 `prettier --write .`；统一读取 `.prettierrc.json` 与 `.prettierignore`，不依赖 Git 历史。源代码、测试或配置变更应运行 `npm run lint`、`npm run format:check`。用 `npm run format` 格式化后审阅 diff；首次全仓格式整理应明确范围，后续功能修改避免混入无关格式变更。
 
 可用 `npm run test:e2e -- --grep 'Trace Explorer'` 等方式限定相关用例；若筛选未匹配任何用例，不算验证完成。共享变更使用完整命令。
 

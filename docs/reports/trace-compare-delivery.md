@@ -14,34 +14,34 @@
 
 ## 实现与复用选择
 
-| 文件 | 职责与选择 |
-| --- | --- |
-| [TraceCompare.tsx](../../src/pages/TraceCompare/TraceCompare.tsx) | 页面组合、受控选择与候选集合，复用 AppShell、Card、Button、StatusBadge |
-| [TracePicker.tsx](../../src/pages/TraceCompare/TracePicker.tsx) | 页面私有的领域选择器，在本页两处复用；自身管理搜索与弹层，选择由页面控制 |
-| [comparison.ts](../../src/pages/TraceCompare/comparison.ts) | 派生指标变化和步骤配对，保持输入不变 |
-| [TraceCompare.css](../../src/pages/TraceCompare/TraceCompare.css) | 页面与 Portal 弹层的局部样式，复用语义 token |
-| [comparisons.ts](../../src/data/comparisons.ts)、[mock.ts](../../src/data/mock.ts) | 独立样例及共享 Trace 集合接入，保证深链接能够定位 |
-| [routes.ts](../../src/router/routes.ts) | 注册页面、导航和面包屑 |
-| [app.css](../../src/styles/app.css) | 修复第四个导航项导致的 426–750px 布局溢出 |
-| [behavior.spec.ts](../../tests/behavior.spec.ts)、[visual.spec.ts](../../tests/visual.spec.ts) | 行为边界、跨页回归及页面与弹层截图 |
-| [trace-picker.ts](../../tests/helpers/trace-picker.ts) | 浏览器测试中的真实搜索与选项选择交互 |
+| 文件                                                                                           | 职责与选择                                                               |
+| ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| [TraceCompare.tsx](../../src/pages/TraceCompare/TraceCompare.tsx)                              | 页面组合、受控选择与候选集合，复用 AppShell、Card、Button、StatusBadge   |
+| [TracePicker.tsx](../../src/pages/TraceCompare/TracePicker.tsx)                                | 页面私有的领域选择器，在本页两处复用；自身管理搜索与弹层，选择由页面控制 |
+| [comparison.ts](../../src/pages/TraceCompare/comparison.ts)                                    | 派生指标变化和步骤配对，保持输入不变                                     |
+| [TraceCompare.css](../../src/pages/TraceCompare/TraceCompare.css)                              | 页面与 Portal 弹层的局部样式，复用语义 token                             |
+| [comparisons.ts](../../src/data/comparisons.ts)、[mock.ts](../../src/data/mock.ts)             | 独立样例及共享 Trace 集合接入，保证深链接能够定位                        |
+| [routes.ts](../../src/router/routes.ts)                                                        | 注册页面、导航和面包屑                                                   |
+| [app.css](../../src/styles/app.css)                                                            | 修复第四个导航项导致的 426–750px 布局溢出                                |
+| [behavior.spec.ts](../../tests/behavior.spec.ts)、[visual.spec.ts](../../tests/visual.spec.ts) | 行为边界、跨页回归及页面与弹层截图                                       |
+| [trace-picker.ts](../../tests/helpers/trace-picker.ts)                                         | 浏览器测试中的真实搜索与选项选择交互                                     |
 
 未修改公共组件接口或新增依赖。MetricCard 固定显示上期对比文案，不适用于本次执行对比，因此保留局部指标布局。页面私有组件的归属规则已补充到 UI Guidelines，具体状态与回调契约保留在[功能说明](../features/done/trace-compare.md)，不再另建一份重复的组件文档。
 
 ## 已执行检查与阶段
 
-| 检查 | 实际结果及适用阶段 |
-| --- | --- |
-| `npm run docs:check` | 实现、英文调整及后续文档补充阶段均通过；归档链接修复后的结果以本次交付回复为准 |
-| `npm run typecheck`、`npm run build` | 最终英文文案及步骤表布局调整阶段通过 |
-| `npm run test:e2e` | 选择器与 UI 调整完成后完整 21 项通过；该次运行早于英文文案调整 |
-| `npm run test:e2e -- --grep 'Trace Compare'` | 英文文案与步骤表调整后，相关 6 项通过；覆盖计算、选择联动、搜索、键盘、空状态、Trace 定位、刷新和溢出 |
-| `npm run test:visual` | 选择器调整阶段，其他页面 5 项对比通过，本页 4 项因预期差异或缺少展开态基线失败；不能视为全站视觉验收通过 |
-| `npm run test:visual -- --grep 'Trace Compare'` | 最终英文调整阶段，本页 4 项因文案及列宽预期变化失败；已目视检查实际截图 |
-| `npm run test:visual:update -- --grep 'Trace Compare'` | 最终英文调整阶段，仅生成本页 4 张候选图，更新模式 4 项完成；不代表基线已批准 |
-| `npm run test:visual`（基线更新后） | 最终英文页面的完整自动视觉对比 9 项通过；与人工批准分别记录 |
-| `git diff --check` | 实现及文档补充阶段通过 |
-| `npm run test:docs` | 未运行（未修改文档检查器，不适用） |
+| 检查                                                   | 实际结果及适用阶段                                                                                       |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| `npm run docs:check`                                   | 实现、英文调整及后续文档补充阶段均通过；归档链接修复后的结果以本次交付回复为准                           |
+| `npm run typecheck`、`npm run build`                   | 最终英文文案及步骤表布局调整阶段通过                                                                     |
+| `npm run test:e2e`                                     | 选择器与 UI 调整完成后完整 21 项通过；该次运行早于英文文案调整                                           |
+| `npm run test:e2e -- --grep 'Trace Compare'`           | 英文文案与步骤表调整后，相关 6 项通过；覆盖计算、选择联动、搜索、键盘、空状态、Trace 定位、刷新和溢出    |
+| `npm run test:visual`                                  | 选择器调整阶段，其他页面 5 项对比通过，本页 4 项因预期差异或缺少展开态基线失败；不能视为全站视觉验收通过 |
+| `npm run test:visual -- --grep 'Trace Compare'`        | 最终英文调整阶段，本页 4 项因文案及列宽预期变化失败；已目视检查实际截图                                  |
+| `npm run test:visual:update -- --grep 'Trace Compare'` | 最终英文调整阶段，仅生成本页 4 张候选图，更新模式 4 项完成；不代表基线已批准                             |
+| `npm run test:visual`（基线更新后）                    | 最终英文页面的完整自动视觉对比 9 项通过；与人工批准分别记录                                              |
+| `git diff --check`                                     | 实现及文档补充阶段通过                                                                                   |
+| `npm run test:docs`                                    | 未运行（未修改文档检查器，不适用）                                                                       |
 
 响应式行为检查覆盖 390、426、500、600、750、760、1000px；页面截图检查覆盖桌面 1440×900、移动端 390×844，以及长选项弹层。已目视检查换行、分隔线、箭头与长文本；未完成独立屏幕阅读器验收或独立人工全流程验收。
 

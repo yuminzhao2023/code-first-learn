@@ -13,6 +13,7 @@
 ## 2. Context required before making changes
 
 Read, in order:
+
 - [UI Guidelines](docs/UI_GUIDELINES.md) (design language + change rules)
 - `src/styles/tokens.css` (canonical semantic tokens)
 - `src/components/ui/` (reusable primitives)

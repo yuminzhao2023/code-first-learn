@@ -1,10 +1,10 @@
-import type { ComponentType } from "react";
-import type { IconName } from "../components/ui/Icon";
-import { TraceExplorer } from "../pages/TraceExplorer";
-import { LlmMetrics } from "../pages/LlmMetrics";
-import { ErrorAnalysis } from "../pages/ErrorAnalysis/ErrorAnalysis";
+import type { ComponentType } from 'react';
+import type { IconName } from '../components/ui/Icon';
+import { TraceExplorer } from '../pages/TraceExplorer';
+import { LlmMetrics } from '../pages/LlmMetrics';
+import { ErrorAnalysis } from '../pages/ErrorAnalysis/ErrorAnalysis';
 
-import { TraceCompare } from "../pages/TraceCompare/TraceCompare";
+import { TraceCompare } from '../pages/TraceCompare/TraceCompare';
 
 interface PageRoute {
   id: string;
@@ -20,35 +20,35 @@ interface PageRoute {
 // Page registration, sidebar navigation, and breadcrumbs share one definition.
 export const pageRoutes = [
   {
-    id: "traces",
-    path: "/",
+    id: 'traces',
+    path: '/',
     Component: TraceExplorer,
-    handle: { label: "Trace Explorer", breadcrumb: "Traces", icon: "layers" },
+    handle: { label: 'Trace Explorer', breadcrumb: 'Traces', icon: 'layers' },
   },
   {
-    id: "metrics",
-    path: "/metrics",
+    id: 'metrics',
+    path: '/metrics',
     Component: LlmMetrics,
-    handle: { label: "LLM Metrics", breadcrumb: "Metrics", icon: "chart" },
+    handle: { label: 'LLM Metrics', breadcrumb: 'Metrics', icon: 'chart' },
   },
   {
-    id: "errors",
-    path: "/errors",
+    id: 'errors',
+    path: '/errors',
     Component: ErrorAnalysis,
     handle: {
-      label: "Error Analysis",
-      breadcrumb: "Error Analysis",
-      icon: "shield",
+      label: 'Error Analysis',
+      breadcrumb: 'Error Analysis',
+      icon: 'shield',
     },
   },
   {
-    id: "compare",
-    path: "/compare",
+    id: 'compare',
+    path: '/compare',
     Component: TraceCompare,
     handle: {
-      label: "Trace Compare",
-      breadcrumb: "Trace Compare",
-      icon: "grid",
+      label: 'Trace Compare',
+      breadcrumb: 'Trace Compare',
+      icon: 'grid',
     },
   },
 ] satisfies PageRoute[];

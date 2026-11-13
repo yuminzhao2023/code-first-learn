@@ -1,7 +1,9 @@
 import { spawnSync } from 'node:child_process';
 
 function run(args) {
-  const result = spawnSync('docker', ['compose', ...args], { stdio: 'inherit' });
+  const result = spawnSync('docker', ['compose', ...args], {
+    stdio: 'inherit',
+  });
   if (result.error) {
     console.error(`Unable to run Docker Compose: ${result.error.message}`);
     process.exit(1);
@@ -14,4 +16,12 @@ function run(args) {
 }
 
 run(['build', 'visual']);
-run(['run', '--rm', 'visual', './node_modules/.bin/playwright', 'test', 'tests/visual.spec.ts', ...process.argv.slice(2)]);
+run([
+  'run',
+  '--rm',
+  'visual',
+  './node_modules/.bin/playwright',
+  'test',
+  'tests/visual.spec.ts',
+  ...process.argv.slice(2),
+]);

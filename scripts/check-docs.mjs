@@ -6,9 +6,13 @@ import { fromMarkdown } from 'mdast-util-from-markdown';
 function markdownFiles(root, directory) {
   return readdirSync(path.join(root, directory), { withFileTypes: true })
     .sort((a, b) => a.name.localeCompare(b.name))
-    .flatMap(entry => {
+    .flatMap((entry) => {
       const name = path.posix.join(directory, entry.name);
-      return entry.isDirectory() ? markdownFiles(root, name) : name.endsWith('.md') ? [name] : [];
+      return entry.isDirectory()
+        ? markdownFiles(root, name)
+        : name.endsWith('.md')
+          ? [name]
+          : [];
     });
 }
 
@@ -24,9 +28,15 @@ function* descendants(node) {
  */
 export function checkDocs(root) {
   const files = ['AGENTS.md', 'README.md', ...markdownFiles(root, 'docs')];
-  const standards = new Set(files.filter(file => file === 'AGENTS.md'
-    || (path.posix.dirname(file) === 'docs' && path.posix.basename(file) !== 'README.md')));
-  const graph = new Map([...standards].map(file => [file, new Set()]));
+  const standards = new Set(
+    files.filter(
+      (file) =>
+        file === 'AGENTS.md' ||
+        (path.posix.dirname(file) === 'docs' &&
+          path.posix.basename(file) !== 'README.md'),
+    ),
+  );
+  const graph = new Map([...standards].map((file) => [file, new Set()]));
   const errors = [];
 
   for (const file of files) {
@@ -35,7 +45,9 @@ export function checkDocs(root) {
       errors.push(`${file}: missing document`);
       continue;
     }
-    const nodes = [...descendants(fromMarkdown(readFileSync(sourcePath, 'utf8')))];
+    const nodes = [
+      ...descendants(fromMarkdown(readFileSync(sourcePath, 'utf8'))),
+    ];
     const definitions = new Map();
     // CommonMark 的引用定义可出现在使用位置之后，重复定义以首次为准。
     for (const node of nodes) {
@@ -48,8 +60,15 @@ export function checkDocs(root) {
       const isLink = node.type === 'link' || node.type === 'linkReference';
       const isImage = node.type === 'image' || node.type === 'imageReference';
       if (!isLink && !isImage) continue;
-      const url = node.type.endsWith('Reference') ? definitions.get(node.identifier) : node.url;
-      if (url === undefined || /^[a-z][a-z\d+.-]*:/i.test(url) || url.startsWith('//')) continue;
+      const url = node.type.endsWith('Reference')
+        ? definitions.get(node.identifier)
+        : node.url;
+      if (
+        url === undefined ||
+        /^[a-z][a-z\d+.-]*:/i.test(url) ||
+        url.startsWith('//')
+      )
+        continue;
       const location = `${file}:${node.position.start.line}:${node.position.start.column}`;
       let relative;
       try {
@@ -65,7 +84,10 @@ export function checkDocs(root) {
         continue;
       }
       const resolved = path.resolve(root, path.dirname(file), relative);
-      const destination = path.relative(root, resolved).split(path.sep).join('/');
+      const destination = path
+        .relative(root, resolved)
+        .split(path.sep)
+        .join('/');
       if (destination === '..' || destination.startsWith('../')) {
         errors.push(`${location}: target is outside the repository: ${url}`);
         continue;
@@ -75,8 +97,10 @@ export function checkDocs(root) {
         continue;
       }
       // 图片需要检查文件是否存在，但不作为规范阅读依赖。
-      if (!isLink || !standards.has(file) || !destination.endsWith('.md')) continue;
-      if (referenced.has(destination)) errors.push(`${location}: repeated document reference: ${destination}`);
+      if (!isLink || !standards.has(file) || !destination.endsWith('.md'))
+        continue;
+      if (referenced.has(destination))
+        errors.push(`${location}: repeated document reference: ${destination}`);
       referenced.add(destination);
       if (destination === 'AGENTS.md' && file !== 'AGENTS.md') {
         errors.push(`${location}: standard must not refer back to AGENTS.md`);
@@ -89,7 +113,9 @@ export function checkDocs(root) {
   const active = [];
   function visit(file) {
     if (active.includes(file)) {
-      errors.push(`standard reference cycle: ${[...active.slice(active.indexOf(file)), file].join(' -> ')}`);
+      errors.push(
+        `standard reference cycle: ${[...active.slice(active.indexOf(file)), file].join(' -> ')}`,
+      );
       return;
     }
     if (visited.has(file)) return;
@@ -102,13 +128,18 @@ export function checkDocs(root) {
   return { errors, fileCount: files.length, standardCount: standards.size };
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === realpathSync(process.argv[1])) {
+if (
+  process.argv[1] &&
+  fileURLToPath(import.meta.url) === realpathSync(process.argv[1])
+) {
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
   const result = checkDocs(root);
   if (result.errors.length) {
     for (const error of result.errors) process.stderr.write(`${error}\n`);
     process.exitCode = 1;
   } else {
-    process.stdout.write(`Documentation checks passed: ${result.fileCount} Markdown files, ${result.standardCount} entry/standard files.\n`);
+    process.stdout.write(
+      `Documentation checks passed: ${result.fileCount} Markdown files, ${result.standardCount} entry/standard files.\n`,
+    );
   }
 }

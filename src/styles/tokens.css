@@ -41,7 +41,7 @@
   --sidebar-width: 244px;
   --page-max-width: 1580px;
   --font-ui:
-    Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --shadow-card: 0 10px 32px rgba(0, 0, 0, 0.08);
